@@ -7,7 +7,7 @@ const SearchPage = () => {
 
     const handleSearch = async () => {
         if (!searchId || isNaN(searchId) || searchId < 1 || searchId > 500) {
-            setError("Veuillez entrer un ID valide STP");
+            setError("Veuillez entrer un ID valide entre 1 et 500.");
             setArticle(null);
             return;
         }
@@ -26,13 +26,12 @@ const SearchPage = () => {
         }
     };
 
-
     return (
         <div style={styles.container}>
             <h1>Recherche d'articles par ID</h1>
             <input
                 type="text"
-                placeholder="Entrez un ID valide"
+                placeholder="Entrez un ID"
                 value={searchId}
                 onChange={(e) => setSearchId(e.target.value)}
                 style={styles.input}
@@ -48,7 +47,6 @@ const SearchPage = () => {
         </div>
     );
 };
-
 
 // évite de faire un fichier css
 const styles = {
