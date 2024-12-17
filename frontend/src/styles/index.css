@@ -13,6 +13,9 @@ code {
 }
 
 
+
+
+
 /* Styles pour la navigation */
 .navbar {
   background-color: #282c34;
@@ -26,4 +29,122 @@ code {
   color: white;
   text-decoration: none;
   font-size: 1.2rem;
+}
+
+
+
+/* Styles globaux pour la page ArticlesPage */
+
+.container {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Liste des articles */
+.list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+/* Chaque article */
+.item {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Texte général */
+.text {
+  color: black;
+}
+
+/* Conteneur du bouton */
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Bouton stylisé */
+.button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+
+
+/* Conteneur principal pour la page de recherche */
+.search-container {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Style pour l'input */
+.input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-right: 1rem;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Style pour le bouton */
+.button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Style pour le texte d'erreur */
+.error {
+  color: red;
+  margin-top: 1rem;
+}
+
+/* Style pour le résultat */
+.result {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Style pour le texte noir */
+.text {
+  color: black;
+}
+
+
+
+
+
+/* Conteneur du bouton */
+.button-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Bouton stylisé */
+.button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
 }

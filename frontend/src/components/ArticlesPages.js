@@ -1,81 +1,91 @@
 import React, { useState, useEffect } from 'react';
-import ButtonComponent from './ButtonComponents'; // Assurez-vous que le fichier existe et que le nom est correct
+import ButtonComponent from './ButtonComponents';
+import '../styles/index.css';
 
 const ArticlesPage = () => {
-    // États pour gérer la liste des articles, l'état de chargement, et l'article sélectionné
-    const [articles, setArticles] = useState([]); // Liste des articles
-    const [loading, setLoading] = useState(true); // Indique si les articles sont en cours de chargement
-    const [selectedArticle, setSelectedArticle] = useState(null); // Contient les détails de l'article sélectionné
+    // États
+    const [countries, setCountries] = useState([]); // Liste des pays
+    const [loading, setLoading] = useState(true); // Chargement initial
+    const [showCountries, setShowCountries] = useState(false); // Contrôle de l'affichage des pays
+    const [selectedCountry, setSelectedCountry] = useState(null); // Pays sélectionné
 
-    // useEffect pour récupérer les articles au montage du composant
+    // Remplacez par votre clé API si nécessaire
+    const API_KEY = 'ca06fe1d47a0e69c0733182637f302d3';
+    const API_URL = `https://api.countrylayer.com/v2/all?access_key=${API_KEY}`;
+
+    // Récupérer la liste des pays
     useEffect(() => {
-        const fetchArticles = async () => {
+        const fetchCountries = async () => {
             try {
-                // Appel à l'API pour récupérer tous les articles
-                const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+                const response = await fetch(API_URL);
                 const data = await response.json();
-                setArticles(data); // Mise à jour de la liste des articles
-                setLoading(false); // Fin du chargement
+                console.log("Données des pays :", data); // Vérifiez la structure des données
+                setCountries(data); // Mise à jour de la liste des pays
+                setLoading(false);
             } catch (error) {
-                console.error("Erreur lors de la récupération des articles :", error);
-                setLoading(false); // Gestion de l'erreur, arrêt du chargement
+                console.error("Erreur lors de la récupération des pays :", error);
+                setLoading(false); // Gestion de l'erreur
             }
         };
 
-        fetchArticles(); // Appel de la fonction pour récupérer les articles
-    }, []); // Tableau de dépendances vide, cette fonction s'exécute une seule fois au montage
+        fetchCountries(); // API pour récupérer les pays
+    }, [API_URL]);
 
-    // Fonction pour récupérer les détails d'un article spécifique
-    const fetchArticleDetails = async (id) => {
-        try {
-            // Appel à l'API pour récupérer les détails d'un article en particulier
-            const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-            const data = await response.json();
-            setSelectedArticle(data); // Mise à jour de l'article sélectionné
-        } catch (error) {
-            console.error("Erreur lors de la récupération des détails de l'article :", error);
-        }
-    };
-
-    // Si les articles sont en cours de chargement, affiche un message
+    // Si en cours de chargement
     if (loading) {
-        return <p>Chargement des articles...</p>;
+        return <p className="text">Chargement...</p>;
     }
 
-    return (
-        <div style={styles.container}>
-            <h1>Articles</h1>
-            {/* Affichage de la liste des articles */}
-            <ul style={styles.list}>
-                {articles.slice(0,3).map(article => (
-                    <li key={article.id} style={styles.item}>
-                        <h2>{article.title}</h2>
-                        <p>{article.body}</p>
-                        {/* Bouton pour afficher les détails d'un article */}
-                        <ButtonComponent articleId={article.id} onDetailsClick={fetchArticleDetails} />
-                    </li>
-                ))}
-            </ul>
+    // Fonction pour afficher la liste des pays
+    const handleShowCountries = () => {
+        setShowCountries(true);
+    };
 
-            {/* Affichage des détails de l'article sélectionné */}
-            {selectedArticle && (
-                <div style={styles.details}>
-                    <h2>Détails de l'article</h2>
-                    <p><strong>ID :</strong> {selectedArticle.id}</p>
-                    <p><strong>Titre :</strong> {selectedArticle.title}</p>
-                    <p><strong>Contenu :</strong> {selectedArticle.body}</p>
-                </div>
+    // Fonction pour afficher les détails d'un pays
+    const handleCountryClick = (country) => {
+        setSelectedCountry(country); // Met à jour le pays sélectionné
+    };
+
+    return (
+        <div className="container">
+            {!showCountries && (
+                <ButtonComponent
+                    articleId={null}
+                    onDetailsClick={handleShowCountries}
+                />
+            )}
+            {showCountries && (
+                <>
+                    <ul className="list">
+                        {countries.map((country) => (
+                            <li key={country.alpha3Code} className="item">
+                                <h2 className="text">{country.name}</h2>
+                                {/* Bouton pour afficher les détails */}
+                                <ButtonComponent
+                                    articleId={country.alpha3Code} // Utilisé pour identifier le pays
+                                    onDetailsClick={() => handleCountryClick(country)}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                    {selectedCountry && (
+                        <div className="details">
+                            <h2 className="text">Détails pour : {selectedCountry.name}</h2>
+                            <p className="text"><strong>Capitale :</strong> {selectedCountry.capital || 'Non disponible'}</p>
+                            <p className="text">
+                                <strong>Langues :</strong>{' '}
+                                {selectedCountry.languages
+                                    ? selectedCountry.languages
+                                        .map((lang) => lang.name)
+                                        .join(', ')
+                                    : 'Non disponible'}
+                            </p>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );
-};
-
-// Styles pour styliser les éléments
-const styles = {
-    container: { padding: '2rem' },
-    list: { listStyle: 'none', padding: 0 },
-    item: { borderBottom: '1px solid #ccc', marginBottom: '1rem', paddingBottom: '1rem' },
-    details: { marginTop: '2rem', padding: '1rem', border: '1px solid #ccc', borderRadius: '5px', backgroundColor: '#f9f9f9' },
 };
 
 export default ArticlesPage;
