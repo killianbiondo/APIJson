@@ -7,7 +7,7 @@ const SearchById = () => {
     const [error, setError] = useState(null); // Stocke les erreurs éventuelles
     const [loading, setLoading] = useState(false); // Indique si une requête est en cours
 
-    // Remplacez par votre clé API
+    // Remplacer par sa propre clé API
     const API_KEY = 'ca06fe1d47a0e69c0733182637f302d3';
     const API_URL = `https://api.countrylayer.com/v2/alpha`;
 
