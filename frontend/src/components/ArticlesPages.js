@@ -9,7 +9,7 @@ const ArticlesPage = () => {
     const [showCountries, setShowCountries] = useState(false); // Contrôle de l'affichage des pays
     const [selectedCountry, setSelectedCountry] = useState(null); // Pays sélectionné
 
-    // Remplacez par votre clé API si nécessaire
+    // Clé API et URL
     const API_KEY = 'ca06fe1d47a0e69c0733182637f302d3';
     const API_URL = `https://api.countrylayer.com/v2/all?access_key=${API_KEY}`;
 
@@ -36,12 +36,12 @@ const ArticlesPage = () => {
         return <p className="text">Chargement...</p>;
     }
 
-    // Fonction pour afficher la liste des pays
+    // Afficher la liste des pays
     const handleShowCountries = () => {
         setShowCountries(true);
     };
 
-    // Fonction pour afficher les détails d'un pays
+    // Afficher les détails d'un pays
     const handleCountryClick = (country) => {
         setSelectedCountry(country); // Met à jour le pays sélectionné
     };
@@ -72,6 +72,8 @@ const ArticlesPage = () => {
                         <div className="details">
                             <h2 className="text">Détails pour : {selectedCountry.name}</h2>
                             <p className="text"><strong>Capitale :</strong> {selectedCountry.capital || 'Non disponible'}</p>
+                            <p className="text"><strong>Région :</strong> {selectedCountry.region || 'Non disponible'}</p>
+                            <p className="text"><strong>Population :</strong> {selectedCountry.population || 'Non disponible'}</p>
                             <p className="text">
                                 <strong>Langues :</strong>{' '}
                                 {selectedCountry.languages
