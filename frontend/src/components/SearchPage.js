@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Card from './Card';
 import '../styles/index.css';
 
 const SearchById = () => {
-    const [searchId, setSearchId] = useState(''); // Stocke l'ID entré dans la barre de recherche
+    const [searchInput, setSearchInput] = useState(''); // Stocke l'entrée utilisateur
     const [country, setCountry] = useState(null); // Stocke les données du pays recherché
     const [error, setError] = useState(null); // Stocke les erreurs éventuelles
     const [loading, setLoading] = useState(false); // Indique si une requête est en cours
 
-    // Remplacer par sa propre clé API
-    const API_KEY = 'ca06fe1d47a0e69c0733182637f302d3';
-    const API_URL = `https://api.countrylayer.com/v2/alpha`;
+    const API_KEY = '47c9ff6f9f566f1c773e324e341cb15a';
+    const API_URL = 'https://api.countrylayer.com/v2';
 
-    // Fonction pour rechercher un pays par son ID
     const handleSearch = async () => {
-        if (!searchId) {
-            setError('Veuillez entrer un ID valide.');
+        if (!searchInput.trim()) {
+            setError('Veuillez entrer un code ou un nom de pays valide.');
             setCountry(null);
             return;
         }
@@ -23,12 +22,23 @@ const SearchById = () => {
         setError(null);
 
         try {
-            const response = await fetch(`${API_URL}/${searchId}?access_key=${API_KEY}`);
-            if (!response.ok) {
-                throw new Error("Aucun pays trouvé pour cet ID.");
+            let response;
+            if (searchInput.length === 2 || searchInput.length === 3) {
+                // Recherche par code (alpha-2 ou alpha-3)
+                response = await fetch(`${API_URL}/alpha/${searchInput}?access_key=${API_KEY}`);
+            } else {
+                // Recherche par nom
+                response = await fetch(`${API_URL}/name/${searchInput}?access_key=${API_KEY}`);
             }
+
+            if (!response.ok) {
+                throw new Error("Aucun pays trouvé pour cette recherche.");
+            }
+
             const data = await response.json();
-            setCountry(data); // Met à jour les données du pays
+            const countryData = Array.isArray(data) ? data[0] : data; // Gère le cas où l'API retourne un tableau (par nom)
+
+            setCountry(countryData); // Met à jour les données du pays
         } catch (err) {
             setError(err.message); // Capture les erreurs
             setCountry(null);
@@ -39,13 +49,13 @@ const SearchById = () => {
 
     return (
         <div className="container">
-            <h1 className="text">Rechercher un pays par ID</h1>
+            <h1 className="text">Rechercher un pays</h1>
             <div className="search-bar">
                 <input
                     type="text"
-                    placeholder="Entrez l'ID du pays (ex: FRA)"
-                    value={searchId}
-                    onChange={(e) => setSearchId(e.target.value.toUpperCase())} // Stocke l'ID en majuscules
+                    placeholder="Entrez un code (FR/FRA) ou un nom de pays (France)"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value.trim())}
                     className="input"
                 />
                 <button onClick={handleSearch} className="button">Rechercher</button>
@@ -55,10 +65,15 @@ const SearchById = () => {
             {error && <p className="error">{error}</p>}
 
             {country && (
-                <div className="details">
-                    <h2 className="text">Détails pour : {country.name}</h2>
-                    <p className="text"><strong>Capitale :</strong> {country.capital || 'Non disponible'}</p>
-                </div>
+                <Card
+                    country={{
+                        name: country.name || 'Nom non disponible',
+                        capital: country.capital || 'Non disponible',
+                        population: country.population || 0,
+                        languages: country.languages?.map((lang) => lang.name).join(', ') || 'Non disponible',
+                        flag: country.flag || null,
+                    }}
+                />
             )}
         </div>
     );

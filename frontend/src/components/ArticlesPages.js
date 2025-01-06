@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
-import ButtonComponent from './ButtonComponents';
+import ButtonComponent from './ButtonComponent';
 import '../styles/index.css';
 
 const ArticlesPage = () => {
@@ -8,7 +8,7 @@ const ArticlesPage = () => {
     const [loading, setLoading] = useState(true); // Chargement initial
     const [visibleDetails, setVisibleDetails] = useState({}); // États des cartes visibles
 
-    const API_KEY = 'ca06fe1d47a0e69c0733182637f302d3';
+    const API_KEY = '47c9ff6f9f566f1c773e324e341cb15a';
     const API_URL = `https://api.countrylayer.com/v2/all?access_key=${API_KEY}`;
 
     useEffect(() => {
@@ -31,6 +31,18 @@ const ArticlesPage = () => {
         return <p className="text">Chargement...</p>;
     }
 
+    const ButtonComponent = ({ articleId, onDetailsClick }) => {
+        return (
+            <button
+                className="details-button"
+                onClick={onDetailsClick}
+            >
+                {articleId} - Voir les détails
+            </button>
+        );
+    };
+
+
     // Gestion de la visibilité des détails
     const toggleDetails = (alpha3Code) => {
         setVisibleDetails((prevState) => ({
@@ -45,9 +57,10 @@ const ArticlesPage = () => {
                 {Array.isArray(countries) && countries.map((country) => (
                     <div key={country.alpha3Code} className="country-item">
                         <ButtonComponent
-                            articleId={country.alpha3Code}
+                            articleId={country.name}
                             onDetailsClick={() => toggleDetails(country.alpha3Code)}
                         />
+
                         {visibleDetails[country.alpha3Code] && (
                             <Card country={country}/>
                         )}
