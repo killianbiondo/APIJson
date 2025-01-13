@@ -1,22 +1,22 @@
+/* Style global pour le corps */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Code styles */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
 }
 
-
-
-/* Navbar Styles */
+/* ----------- Navbar Styles ----------- */
 .navbar {
-  background-color: #2c3e50; /* Fond sombre */
+  background-color: #2c3e50;
   color: white;
   padding: 1rem 2rem;
   display: flex;
@@ -48,10 +48,9 @@ code {
   transition: color 0.3s, transform 0.3s;
 }
 
-/* Effet de survol */
 .navbar .nav-link:hover {
-  color: #3498db; /* Couleur du survol */
-  transform: scale(1.1); /* Agrandissement léger */
+  color: #3498db;
+  transform: scale(1.1);
 }
 
 /* Mobile: Menu hamburger */
@@ -89,7 +88,7 @@ code {
 /* Afficher le hamburger sur mobile */
 @media (max-width: 768px) {
   .navbar .nav-links {
-    display: none; /* Cacher les liens par défaut */
+    display: none;
   }
 
   .hamburger {
@@ -101,169 +100,112 @@ code {
   }
 }
 
-
-
-/* Styles globaux pour la page ArticlesPage */
-
-.container {
-  padding: 2rem;
-  text-align: center;
-}
-
-/* Liste des articles */
-.list {
-  list-style: none;
-  padding: 0;
-  text-align: left;
-}
-
-/* Chaque article */
-.item {
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-}
-
-/* Texte général */
-.text {
-  color: black;
-}
-
-
-
-/* Conteneur principal pour la page de recherche */
-.search-container {
-  padding: 2rem;
-  text-align: center;
-}
-
-/* Style pour l'input */
-.input {
-  padding: 0.5rem;
-  font-size: 1rem;
-  margin-right: 1rem;
-  width: 200px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-/* Conteneur du bouton */
-.button-container {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 0.5rem;
-}
-
-/* Bouton stylisé */
-.button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.details-button {
-  padding: 10px 20px; /* Agrandir le bouton */
-  font-size: 16px; /* Texte plus grand */
-  background-color: #007bff; /* Couleur du bouton */
-  color: white; /* Texte en blanc */
-  border: none; /* Supprimer la bordure */
-  border-radius: 5px; /* Coins arrondis */
-  cursor: pointer; /* Curseur pointer */
-  margin: 10px 0; /* Espacement vertical */
-  transition: background-color 0.3s ease; /* Effet au survol */
-}
-
-.details-button:hover {
-  background-color: #0056b3; /* Couleur au survol */
-}
-
-
-.button:hover {
-  background-color: #0056b3;
-}
-
-
-/* Style pour le texte d'erreur */
-.error {
-  color: red;
-  margin-top: 1rem;
-}
-
-/* Style pour le résultat */
-.result {
-  margin-top: 2rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-/* Style pour le texte noir */
-.text {
-  color: black;
-}
-
-
-
-
-
-/* Conteneur du bouton */
-.button-container {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-/* Bouton stylisé */
-.button {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 5px;
-}
-
+/* ----------- Articles Page Styles ----------- */
 
 /* Conteneur principal */
 .container {
   padding: 2rem;
   text-align: center;
+  font-family: Arial, sans-serif;
 }
 
-/* Conteneur des cartes */
+/* Conteneur principal des cartes */
 .cards-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 1rem;
-  justify-content: center;
-  margin-top: 2rem;
+  align-items: center;
 }
 
-/* Carte individuelle */
+/* Élément individuel pour chaque pays */
+.country-item {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
 
+/* ----------- Boutons ----------- */
+
+/* Bouton général */
+.button, .details-button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px 0;
+  max-width: 300px;
+  width: 100%;
+}
+
+.button:hover, .details-button:hover {
+  background-color: #0056b3;
+}
+
+/* ----------- Carte des pays ----------- */
+
+/* Conteneur de la carte */
+.card {
+  margin: 0 auto;
+  padding: 1rem;
+  max-width: 500px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Titre de la carte */
 .card-title {
   font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-/* Texte général */
+/* Drapeau du pays */
+.country-flag {
+  width: 100px;
+  height: auto;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ----------- Recherche Styles ----------- */
+
+.search-container {
+  padding: 2rem;
+  text-align: center;
+}
+
+.search-bar {
+  margin-bottom: 2rem;
+}
+
+.input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 80%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* ----------- Texte & Erreurs ----------- */
+
 .text {
   color: black;
 }
 
-.card {
-  background-color: white; /* Assurez-vous que le fond est compatible avec le texte noir */
-  color: black; /* Définit la couleur du texte en noir */
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
-  margin: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
+.error {
+  color: red;
+  font-weight: bold;
+  margin-top: 1rem;
 }

@@ -4,70 +4,119 @@ import ButtonComponent from './ButtonComponent';
 import '../styles/index.css';
 
 const ArticlesPage = () => {
-    const [countries, setCountries] = useState([]); // Liste des pays
-    const [loading, setLoading] = useState(true); // Chargement initial
+    const [cities, setCities] = useState([]); // Liste des villes
+    const [loading, setLoading] = useState(false); // Chargement
     const [visibleDetails, setVisibleDetails] = useState({}); // États des cartes visibles
+    const [selectedCountry, setSelectedCountry] = useState(null); // Pays sélectionné
 
-    const API_KEY = '47c9ff6f9f566f1c773e324e341cb15a';
-    const API_URL = `https://api.countrylayer.com/v2/all?access_key=${API_KEY}`;
+    // API_URL de base
+    const API_URL = `http://api.zippopotam.us`;
 
-    useEffect(() => {
-        const fetchCountries = async () => {
-            try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
-                setCountries(data);
-                setLoading(false);
-            } catch (error) {
-                console.error("Erreur lors de la récupération des pays :", error);
-                setLoading(false);
+    // Fonction pour récupérer les villes d'un pays avec un code postal
+    const fetchCities = async (country, postalCode) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${API_URL}/${country}/${postalCode}`);
+            const data = await response.json();
+
+            console.log(data); // Vérification de la réponse de l'API
+
+            if (data && data.places) {
+                const places = data.places.map((place) => ({
+                    name: place['place name'],
+                    longitude: place['longitude'],
+                    latitude: place['latitude'],
+                    state: place['state'],
+                    country: data['country abbreviation'],
+                    postalCode: place['postal code'], // Code postal
+                }));
+                setCities(places);
+            } else {
+                console.error('Aucune ville trouvée');
+                setCities([]);
             }
-        };
-
-        fetchCountries();
-    }, [API_URL]);
-
-    if (loading) {
-        return <p className="text">Chargement...</p>;
-    }
-
-    const ButtonComponent = ({ articleId, onDetailsClick }) => {
-        return (
-            <button
-                className="details-button"
-                onClick={onDetailsClick}
-            >
-                {articleId} - Voir les détails
-            </button>
-        );
+        } catch (error) {
+            console.error("Erreur lors de la récupération des villes :", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
+    // Gestion de la sélection du pays
+    const handleCountrySelect = (country) => {
+        console.log(`Pays sélectionné: ${country}`);
+        setSelectedCountry(country);
+
+        // Essaye avec un code postal par défaut (par exemple 90210 pour les États-Unis)
+        fetchCities(country, '90210');  // Teste avec un code postal fixe pour l'instant
+    };
 
     // Gestion de la visibilité des détails
-    const toggleDetails = (alpha3Code) => {
+    const toggleDetails = (cityName) => {
         setVisibleDetails((prevState) => ({
             ...prevState,
-            [alpha3Code]: !prevState[alpha3Code], // Bascule l'état visible/caché
+            [cityName]: !prevState[cityName], // Bascule l'état visible/caché
         }));
     };
 
+    // Liste des pays à afficher
+    const countries = [
+        { code: 'us', name: 'États-Unis' },
+        { code: 'fr', name: 'France' },
+        { code: 'de', name: 'Allemagne' },
+        { code: 'gb', name: 'Royaume-Uni' },
+    ];
+
     return (
         <div className="container">
-            <div className="cards-container">
-                {Array.isArray(countries) && countries.map((country) => (
-                    <div key={country.alpha3Code} className="country-item">
-                        <ButtonComponent
-                            articleId={country.name}
-                            onDetailsClick={() => toggleDetails(country.alpha3Code)}
-                        />
-
-                        {visibleDetails[country.alpha3Code] && (
-                            <Card country={country}/>
-                        )}
-                    </div>
+            {/* Affichage des boutons de pays */}
+            <div className="button-container">
+                {countries.map((country) => (
+                    <ButtonComponent
+                        key={country.code}
+                        articleId={country.code}
+                        onClick={() => handleCountrySelect(country.code)}
+                    >
+                        {country.name}
+                    </ButtonComponent>
                 ))}
             </div>
+
+            {loading && <p className="text">Chargement des villes...</p>}
+
+            {/* Affichage des villes lorsque un pays est sélectionné */}
+            {selectedCountry && !loading && (
+                <div className="cards-container">
+                    {cities.length > 0 ? (
+                        cities.map((city, index) => (
+                            <div key={index} className="country-item">
+                                <ButtonComponent
+                                    articleId={city.name}
+                                    onDetailsClick={() => toggleDetails(city.name)}
+                                >
+                                    {city.name}
+                                </ButtonComponent>
+
+                                {visibleDetails[city.name] && (
+                                    <Card
+                                        country={{
+                                            name: city.name,
+                                            region: city.state,
+                                            country: city.country,
+                                            postalCode: city.postalCode,
+                                            coordinates: `Lat: ${city.latitude}, Long: ${city.longitude}`,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        ))
+                    ) : (
+                        <p>Aucune ville trouvée pour ce pays.</p>
+                    )}
+                </div>
+            )}
         </div>
     );
-}
+};
+
 export default ArticlesPage;
