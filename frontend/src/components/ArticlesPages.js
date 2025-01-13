@@ -30,7 +30,9 @@ const ArticlesPage = () => {
                     country: data['country abbreviation'],
                     postalCode: place['postal code'], // Code postal
                 }));
-                setCities(places);
+
+                // Limiter à 50 villes pour l'affichage
+                setCities(places.slice(0, 50));
             } else {
                 console.error('Aucune ville trouvée');
                 setCities([]);
